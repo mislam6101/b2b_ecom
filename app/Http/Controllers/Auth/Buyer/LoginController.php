@@ -33,11 +33,6 @@ class LoginController extends Controller
 
             $buyer = Buyer::where('email', $request->email)->first();
 
-            // Inactive account → block + flash message
-            if ($buyer->status == 0) {
-                return back()->with('inactive', true);
-            }
-
             // Active → login
             Auth::guard('buyer')->login($buyer);
 

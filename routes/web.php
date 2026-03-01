@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\FrontproductController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SellerController;
@@ -10,10 +12,17 @@ use Illuminate\Support\Facades\Route;
 | Web Routes
 |--------------------------------------------------------------------------
 */
+Route::get('/ilogin', function () {
+    return view('init_login');
+})->name('init.login');
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/ireg', function () {
+    return view('init_reg');
+})->name('init.reg');
+
+Route::resource('/', HomeController::class);
+
+Route::resource('prod', FrontproductController::class);
 
 // --------------------- Seller Guest Routes ---------------------
 Route::middleware('guest:seller')->prefix('seller')->group(function () {

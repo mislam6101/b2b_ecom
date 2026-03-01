@@ -21,14 +21,17 @@ class RegisterController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'company' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string', 'max:300'],
+            'contact' => ['required', 'string', 'max:60'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.Buyer::class],
             'password' => ['required', 'confirmed', 'min:8'],
         ]);
 
         $buyer = Buyer::create([
-            'name' => $request->name,
-            'contact_number' => $request->contact_number,
+            'company' => $request->company,
+            'address' => $request->address,
+            'contact' => $request->contact,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
