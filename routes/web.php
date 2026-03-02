@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\BuyerRfqController;
 use App\Http\Controllers\FrontproductController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RfqController;
 use App\Http\Controllers\SellerController;
 use Illuminate\Support\Facades\Route;
 
@@ -12,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 | Web Routes
 |--------------------------------------------------------------------------
 */
+
 Route::get('/ilogin', function () {
     return view('init_login');
 })->name('init.login');
@@ -43,6 +47,17 @@ Route::middleware('auth:seller')->prefix('seller')->group(function () {
 
     // Seller product routes
     Route::resource('product', ProductController::class);
+
+    Route::get('/seller/rfqs', [RfqController::class, 'sellerIndex'])->name('seller.rfqs');
+
+    Route::get('rfq/{rfq}/reply', [RfqController::class, 'replyForm'])
+        ->name('seller.rfq.reply.form');
+
+    Route::post('rfq/{rfq}/reply', [RfqController::class, 'submitReply'])
+        ->name('seller.rfq.reply.submit');
+
+    Route::get('/orders', [App\Http\Controllers\OrderController::class, 'sellerOrders'])->name('seller.orders');
+    Route::post('/orders/{order}/status', [App\Http\Controllers\OrderController::class, 'updateSellerOrderStatus'])->name('seller.orders.status');
 });
 
 // --------------------- Admin Seller Management ---------------------
@@ -87,4 +102,26 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// RFQ routes
+Route::middleware('auth:buyer')->group(function () {
+
+    Route::get('/rfq/{product}', [RfqController::class, 'create'])->name('rfq.create');
+    Route::post('/rfq', [RfqController::class, 'store'])->name('rfq.submit');
+
+    Route::get('/order/create/{product}', [OrderController::class, 'create'])
+        ->name('order.create');
+    Route::post('/order/store', [OrderController::class, 'store'])
+        ->name('order.store');
+});
+Route::get('/rfqs', [RfqController::class, 'index'])->name('rfq.index');
+
+
+Route::middleware('auth:buyer')->group(function () {
+    Route::get('buyer/rfq', [BuyerRfqController::class, 'index'])->name('buyer.rfq');
+    Route::post('buyer/rfq/respond/{reply}', [BuyerRfqController::class, 'respond'])->name('buyer.rfq.respond');
+});
+
+Route::middleware('auth:buyer')->group(function () {
+    Route::get('/buyer/orders', [OrderController::class, 'buyerIndex'])->name('buyer.orders');
+});
 require __DIR__ . '/auth.php';

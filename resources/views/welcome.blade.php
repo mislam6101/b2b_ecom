@@ -199,81 +199,64 @@
             white-space: nowrap;
         }
 
-        /* === হিরো সেকশন - রেসপনসিভ === */
+        /* === হিরো সেকশন - পৃষ্ঠার মাঝখানে === */
         .hero {
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: white;
-            padding: 40px 0;
+            padding: 60px 0;
+            margin: 40px 0;
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         }
 
         .hero-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            align-items: center;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
         }
 
-        .hero-left h1 {
-            font-size: clamp(1.8rem, 5vw, 3.5rem);
+        .hero-content h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
             font-weight: 800;
             line-height: 1.2;
             margin-bottom: 20px;
         }
 
-        .hero-left h1 span {
+        .hero-content h1 span {
             color: var(--accent);
+            border-bottom: 3px solid var(--accent);
+            display: inline-block;
+            padding-bottom: 5px;
         }
 
-        .hero-left p {
-            font-size: clamp(0.9rem, 3vw, 1.2rem);
-            margin-bottom: 25px;
+        .hero-content p {
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            margin-bottom: 30px;
             opacity: 0.9;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
         }
 
         .hero-stats {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 40px;
+            justify-content: center;
             margin-top: 30px;
         }
 
         .stat-item h3 {
-            font-size: clamp(1.2rem, 4vw, 2rem);
+            font-size: clamp(1.5rem, 4vw, 2rem);
             color: var(--accent);
-        }
-
-        .hero-right {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 25px;
-        }
-
-        .quick-rfq h3 {
-            font-size: 1.4rem;
-            margin-bottom: 20px;
-        }
-
-        .quick-rfq input,
-        .quick-rfq select {
-            width: 100%;
-            padding: 12px 15px;
-            margin-bottom: 15px;
-            border: none;
-            border-radius: 30px;
-            font-size: 0.95rem;
-        }
-
-        .quick-rfq button {
-            width: 100%;
-            padding: 14px;
-            background: var(--accent);
-            border: none;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 1rem;
-            color: var(--primary-dark);
-            cursor: pointer;
         }
 
         /* === ক্যাটাগরি সেকশন - রেসপনসিভ গ্রিড === */
@@ -308,6 +291,7 @@
             text-align: center;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             transition: 0.3s;
+            cursor: pointer;
         }
 
         .category-card i {
@@ -320,7 +304,7 @@
             font-size: 0.8rem;
         }
 
-        /* === ফিল্টার - মোবাইল ফ্রেন্ডলি === */
+        /* === ফিল্টার - আগের মতো ঠিক করা হয়েছে === */
         .filter-advanced {
             background: white;
             border-radius: 24px;
@@ -349,6 +333,12 @@
             border: 2px solid var(--gray-200);
             border-radius: 12px;
             font-size: 0.9rem;
+        }
+
+        .filter-field input:focus,
+        .filter-field select:focus {
+            border-color: var(--accent);
+            outline: none;
         }
 
         .filter-buttons {
@@ -418,6 +408,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .product-image i {
@@ -668,6 +665,7 @@
             background: var(--primary-dark);
             color: white;
             padding: 50px 0 20px;
+            margin-top: 50px;
         }
 
         .footer-grid {
@@ -767,15 +765,7 @@
             }
 
             .hero-content {
-                grid-template-columns: 1fr;
-            }
-
-            .hero-stats {
-                justify-content: center;
-            }
-
-            .stat-item {
-                text-align: center;
+                padding: 0 20px;
             }
 
             .filter-buttons {
@@ -788,6 +778,10 @@
 
             .welcome-message {
                 text-align: center;
+            }
+
+            .hero-stats {
+                gap: 20px;
             }
         }
 
@@ -837,7 +831,6 @@
             padding: 6px 16px;
             cursor: pointer;
             text-decoration: none;
-            /* underline remove */
             display: inline-block;
             text-align: center;
             transition: 0.3s;
@@ -846,7 +839,6 @@
         .nav-buttons a.btn-outline {
             background: transparent;
             border: 2px solid #0b2b4f;
-            /* primary color */
             color: #0b2b4f;
         }
 
@@ -857,17 +849,14 @@
 
         .nav-buttons a.btn-primary {
             background: #0b2b4f;
-            /* primary color */
             color: white;
         }
 
         .nav-buttons a.btn-primary:hover {
             background: #061a30;
-            /* darken on hover */
-            color: white;
         }
 
-        /* টেস্টিমনিয়াল সেকশন যোগ করা হল */
+        /* টেস্টিমনিয়াল সেকশন */
         .testimonials {
             padding: 50px 0;
         }
@@ -947,24 +936,33 @@
             <div class="nav-menu">
                 <div class="nav-links">
                     <a href="#">হোম</a>
-                    <a href="{{route('prod.index')}}">পণ্য </a>
-                    <a href="#">অর্ডার</a>
+                    <a href="{{route('prod.index')}}">পণ্যসমূহ</a>
                 </div>
                 <div class="nav-buttons">
-                    <a href="{{ route('init.login') }}" class="btn-outline">লগইন</a>
-                    <a href="{{ route('init.reg') }}" class="btn-primary">রেজিস্টার</a>
+                    @auth('buyer')
+                    <a href="{{ url('buyer/dashboard') }}" class="btn btn-primary">
+                        ড্যাশবোর্ড
+                    </a>
+                    @else
+                    <a href="{{ route('init.login') }}" class="btn btn-outline">
+                        লগইন
+                    </a>
+                    <a href="{{ route('init.reg') }}" class="btn btn-primary">
+                        রেজিস্ট্রেশন
+                    </a>
+                    @endauth
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- হিরো সেকশন -->
-    <section class="hero">
-        <div class="container hero-content">
-            <div class="hero-left">
-                <h1>বিশ্বস্ত <span>সরবরাহকারীদের</span> কাছ থেকে পাইকারি পণ্য সংগ্রহ করুন</h1>
+    <!-- হিরো সেকশন - পৃষ্ঠার মাঝখানে -->
+    <div class="container">
+        <section class="hero">
+            <div class="hero-content">
+                <h1>বিশ্বস্ত সরবরাহকারীদের কাছ থেকে পাইকারি পণ্য সংগ্রহ করুন</h1>
                 <p>সরাসরি প্রস্তুতকারক ও সরবরাহকারীদের সাথে যুক্ত হয়ে সহজে এবং নিরাপদে পাইকারি পণ্য ক্রয় করুন।</p>
-                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                <div class="hero-buttons">
                     <button class="btn-primary" style="background: var(--accent); color: var(--primary-dark);">পণ্য দেখুন</button>
                     <button class="btn-outline" style="border-color: white; color: white;">কোটেশন অনুরোধ</button>
                 </div>
@@ -983,27 +981,12 @@
                     </div>
                 </div>
             </div>
-            <div class="hero-right">
-                <div class="quick-rfq">
-                    <h3>দ্রুত কোটেশন পান</h3>
-                    <input type="text" placeholder="আপনার নাম">
-                    <input type="email" placeholder="ইমেইল">
-                    <select>
-                        <option>পণ্যের ক্যাটাগরি</option>
-                        <option>ইলেকট্রনিক্স</option>
-                        <option>টেক্সটাইল</option>
-                    </select>
-                    <button>অনুরোধ পাঠান <i class="fas fa-paper-plane"></i></button>
-                </div>
-            </div>
-        </div>
-    </section>
+        </section>
+    </div>
 
     <div class="container">
-
-
-        <!-- ফিল্টার -->
-        <form action="{{route('index')}}">
+        <!-- ফিল্টার - আগের মতো ঠিক করা হয়েছে -->
+        <form action="{{route('index')}}" method="GET" id="filterForm">
             <div class="filter-advanced">
                 <div class="filter-row">
                     <div class="filter-field">
@@ -1012,42 +995,40 @@
                     </div>
                     <div class="filter-field">
                         <label>মূল্য সীমা</label>
-                        <input type="number" placeholder="সর্বনিম্ন">
+                        <input type="number" name="min_price" value="{{ request('min_price') }}" placeholder="সর্বনিম্ন">
                     </div>
                     <div class="filter-field">
                         <label>MOQ</label>
-                        <input type="number" placeholder="ন্যূনতম অর্ডার">
+                        <input type="number" name="moq" value="{{ request('moq') }}" placeholder="ন্যূনতম অর্ডার">
                     </div>
                     <div class="filter-field">
                         <label>সরবরাহকারীর ধরণ</label>
-                        <select>
-                            <option>যেকোনো</option>
-                            <option>প্রস্তুতকারক</option>
-                            <option>পাইকারি বিক্রেতা</option>
+                        <select name="supplier_type">
+                            <option value="">যেকোনো</option>
+                            <option value="manufacturer" {{ request('supplier_type') == 'manufacturer' ? 'selected' : '' }}>প্রস্তুতকারক</option>
+                            <option value="wholesaler" {{ request('supplier_type') == 'wholesaler' ? 'selected' : '' }}>পাইকারি বিক্রেতা</option>
                         </select>
                     </div>
                     <div class="filter-buttons">
-                        <button class="btn-filter">ফিল্টার</button>
-                        <button class="btn-reset">রিসেট</button>
+                        <button type="submit" class="btn-filter">ফিল্টার</button>
+                        <button type="button" class="btn-reset" onclick="resetFilter()">রিসেট</button>
                     </div>
                 </div>
             </div>
         </form>
 
         <!-- প্রোডাক্ট গ্রিড -->
-
         <div class="section-header">
             <h2>ভেরিফাইড পণ্যসমূহ</h2>
             <a href="#" style="color: var(--primary);">সব পণ্য →</a>
         </div>
         <div class="product-grid">
-
             @foreach($products as $p)
             @if($p->status == 1)
             <div class="product-card">
                 <div class="product-badge">ভেরিফাইড</div>
                 <div class="product-image">
-                    <i class="fas fa-cogs"></i>
+                    <img src="{{ asset('storage/products/'.$p->image) }}" alt="{{ $p->name }}">
                 </div>
                 <div class="product-content">
                     <h3 class="product-title">{{$p->name}}</h3>
@@ -1058,11 +1039,11 @@
                     <div class="product-price-row">
                         <div class="unit-price">
                             <small>একক মূল্য</small>
-                            <span>${{$p->price}}</span>
+                            <span>৳{{$p->price}}</span>
                         </div>
                         <div class="wholesale-price">
                             <small>পাইকারি</small>
-                            <span>${{$p->price * 0.97}}</span>
+                            <span>৳{{ number_format($p->price * 0.97, 2) }}</span>
                         </div>
                     </div>
                     <div class="product-moq">
@@ -1079,7 +1060,7 @@
             @endforeach
         </div>
 
-        <!-- টেস্টিমনিয়াল সেকশন - নতুন যোগ করা -->
+        <!-- টেস্টিমনিয়াল সেকশন -->
         <div class="testimonials">
             <div class="section-header">
                 <h2>আমাদের ক্রেতারা কী বলছেন</h2>
@@ -1114,8 +1095,6 @@
                 </div>
             </div>
         </div>
-
-
     </div>
 
     <!-- ফুটার -->
@@ -1186,42 +1165,17 @@
             setTimeout(() => toast.remove(), 3000);
         }
 
+        // রিসেট ফাংশন
+        function resetFilter() {
+            window.location.href = "{{ route('index') }}";
+        }
+
         // সব বাটনে ক্লিক ইভেন্ট
         document.addEventListener('DOMContentLoaded', function() {
-            const buttons = document.querySelectorAll('button:not(.filter-buttons button)');
-            buttons.forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    if (this.classList.contains('btn-rfq') || this.closest('.quick-rfq')) {
-                        showToast('আপনার অনুরোধ সফলভাবে পাঠানো হয়েছে।', 'success');
-                    } else if (this.classList.contains('btn-detail')) {
-                        showToast('পণ্যের বিস্তারিত তথ্য দেখছেন।', 'success');
-                    } else if (this.classList.contains('btn-primary') || this.classList.contains('btn-outline')) {
-                        showToast('ফিচারটি শীঘ্রই চালু হচ্ছে।', 'success');
-                    }
-                });
-            });
-
             // ফিল্টার বাটন
-            document.querySelector('.btn-filter')?.addEventListener('click', function() {
+            document.querySelector('.btn-filter')?.addEventListener('click', function(e) {
+                // ফর্ম স্বাভাবিকভাবে submit হবে
                 showToast('ফিল্টার প্রয়োগ করা হয়েছে।', 'success');
-            });
-
-            // ট্যাব
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.addEventListener('click', function() {
-                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    showToast(`${this.textContent} অর্ডার দেখানো হচ্ছে।`, 'success');
-                });
-            });
-
-            // রোল সিলেক্টর
-            document.querySelectorAll('.role-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('.role-btn').forEach(r => r.classList.remove('active'));
-                    this.classList.add('active');
-                });
             });
 
             // ক্যাটাগরি কার্ড
@@ -1248,32 +1202,6 @@
                     navMenu.style.padding = '20px';
                     navMenu.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
                 }
-            });
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Existing code...
-
-            // রিসেট বাটন ফাংশন
-            const resetBtn = document.querySelector('.btn-reset');
-            resetBtn.addEventListener('click', function(e) {
-                e.preventDefault(); // page reload প্রতিরোধ
-                const form = this.closest('form');
-                form.reset(); // সব input খালি করবে
-                showToast('ফিল্টার রিসেট করা হয়েছে।', 'success');
-
-                // Ajax দিয়ে সব product আবার load করতে চাইলে, এখানে fetch বা Axios call করতে পারো
-                // উদাহরণ (Laravel route: /products):
-                fetch('{{ route("index") }}')
-                    .then(response => response.text())
-                    .then(html => {
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(html, 'text/html');
-                        const newProducts = doc.querySelector('.product-grid').innerHTML;
-                        document.querySelector('.product-grid').innerHTML = newProducts;
-                    })
-                    .catch(err => console.error(err));
             });
         });
     </script>

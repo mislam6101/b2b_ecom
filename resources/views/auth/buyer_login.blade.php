@@ -604,6 +604,9 @@
                     </div>
                     @endif
                     @csrf
+                    @if(request('redirect'))
+                    <input type="hidden" name="redirect" value="{{ request('redirect') }}">
+                    @endif
                     <div class="form-group">
                         <label>ইমেইল ঠিকানা / ব্যবসায়িক আইডি</label>
                         <div class="input-wrapper">
@@ -729,7 +732,7 @@
     <!-- টোস্ট কন্টেইনার -->
     <div class="toast-container" id="toastContainer"></div>
 
-    
+
 </body>
 
 </html>

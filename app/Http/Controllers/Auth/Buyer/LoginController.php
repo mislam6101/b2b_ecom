@@ -25,16 +25,19 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        // Check credentials first
         if (Auth::guard('buyer')->validate([
             'email' => $request->email,
             'password' => $request->password,
         ])) {
 
             $buyer = Buyer::where('email', $request->email)->first();
-
-            // Active → login
             Auth::guard('buyer')->login($buyer);
+
+            $redirect = $request->input('redirect');
+
+            if ($redirect) {
+                return redirect($redirect);
+            }
 
             return redirect()->intended(RouteServiceProvider::BUYER_DASHBOARD);
         }

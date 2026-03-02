@@ -28,4 +28,13 @@ class Buyer extends Authenticatable
     protected $casts = [
         'password' => 'hashed',
     ];
+
+    public function rfqs()
+    {
+        return $this->hasMany(Rfq::class);
+    }
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

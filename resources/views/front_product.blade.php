@@ -816,6 +816,10 @@
                 width: 110px;
             }
         }
+
+        .product-details {
+            scroll-margin-top: 100px;
+        }
     </style>
 </head>
 
@@ -840,11 +844,20 @@
                 <div class="nav-links">
                     <a href="{{url('/')}}">হোম</a>
                     <a href="#">পণ্যসমূহ</a>
-                    <a href="#">অর্ডার</a>
                 </div>
                 <div class="nav-buttons">
-                    <a href="{{ route('init.login') }}" class="btn-outline">লগইন</a>
-                    <a href="{{ route('init.reg') }}" class="btn-primary">রেজিস্টার</a>
+                    @auth('buyer')
+                    <a href="{{ url('buyer/dashboard') }}" class="btn btn-primary">
+                        ড্যাশবোর্ড
+                    </a>
+                    @else
+                    <a href="{{ route('init.login') }}" class="btn btn-outline">
+                        লগইন
+                    </a>
+                    <a href="{{ route('init.reg') }}" class="btn btn-primary">
+                        রেজিস্ট্রেশন
+                    </a>
+                    @endauth
                 </div>
             </div>
         </div>
@@ -861,7 +874,7 @@
                 <div class="image-gallery">
                     <div class="main-image">
                         <div class="badge-verified" id="verifiedBadge" style="display: {{ $firstProduct->status == 1 ? 'block' : 'none' }}; ">ভেরিফাইড</div>
-                        <i class="fas fa-clock"></i>
+                        <img src="{{ asset('storage/products/'.$firstProduct->image) }}" alt="Product Image">
                     </div>
 
                 </div>
@@ -890,17 +903,17 @@
                         <div class="price-row">
                             <div class="price-box">
                                 <div class="label">একক মূল্য</div>
-                                <div class="value" id="productPrice">${{ number_format($firstProduct->price, 2) }}</div>
+                                <div class="value" id="productPrice">৳{{ number_format($firstProduct->price, 2) }}</div>
                                 <div class="unit">/পিস</div>
                             </div>
                             <div class="price-box wholesale-box">
-                                <div class="label">পাইকারি (১০০+)</div>
-                                <div class="value" id="wholesalePrice">${{ number_format($firstProduct->price * 0.97, 2) }}</div>
+                                <div class="label">পাইকারি (৫০+)</div>
+                                <div class="value" id="wholesalePrice">৳{{ number_format($firstProduct->price * 0.97, 2) }}</div>
                                 <div class="unit">/পিস</div>
                             </div>
                             <div class="price-box">
-                                <div class="label">বাল্ক (৫০০+)</div>
-                                <div class="value" id="bulkPrice">${{ number_format($firstProduct->price * 0.93, 2) }}</div>
+                                <div class="label">বাল্ক (১০০+)</div>
+                                <div class="value" id="bulkPrice">৳{{ number_format($firstProduct->price * 0.93, 2) }}</div>
                                 <div class="unit">/পিস</div>
                             </div>
                         </div>
@@ -927,9 +940,32 @@
                         </div>
 
                         <div class="action-buttons">
-                            <button class="btn-buy">অর্ডার করুন</button>
-                            <button class="btn-quote-large">কোটেশন অনুরোধ</button>
+                            @auth('buyer')
+                            <a href="{{ route('order.create', $firstProduct->id) }}"
+                                class="btn-buy"
+                                data-route="{{ route('order.create', '') }}">
+                                অর্ডার করুন
+                            </a>
+                            @else
+                            <a href="{{ route('buyer.login', ['redirect' => route('order.create', $firstProduct->id)]) }}"
+                                class="btn-buy">
+                                অর্ডার করুন
+                            </a>
+                            @endauth
+                            @auth('buyer')
+                            <a href="{{ route('rfq.create', $firstProduct->id) }}"
+                                class="btn btn-outline btn-quote-large"
+                                id="btnQuote"
+                                data-route="{{ route('rfq.create', '') }}">
+                                কোটেশন অনুরোধ
+                            </a>
                         </div>
+                        @else
+                        <a href="{{ route('buyer.login', ['redirect' => route('rfq.create', $firstProduct->id)]) }}"
+                            class="btn btn-outline btn-quote-large">
+                            কোটেশন অনুরোধ
+                        </a>
+                        @endauth
 
                         <div class="features-mini">
                             <span><i class="fas fa-shield-alt"></i> নিরাপদ লেনদেন</span>
@@ -954,8 +990,9 @@
             <div class="related-grid">
                 @foreach($products as $p)
                 <div class="related-card"
+                    data-id="{{$p->id}}"
                     data-name="{{$p->name}}"
-                    data-supplier='{{$p->seller->company}}'
+                    data-supplier="{{$p->seller->company}}"
                     data-price="{{$p->price}}"
                     data-moqu="{{$p->moq}}"
                     data-quantity="{{$p->quantity}}"
@@ -964,7 +1001,7 @@
                         <i class="fas fa-headphones"></i>
                     </div>
                     <h4>{{$p->name}}</h4>
-                    <div class="related-price"><span>${{$p->price}}</span><span>MOQ: {{$p->moq}}</span></div>
+                    <div class="related-price"><span>৳{{$p->price}}</span><span>MOQ: {{$p->moq}}</span></div>
                     @if($p->status == 1)
                     <div class="text-center">
                         <span class="badge bg-primary">ভেরিফাইড</span>
@@ -1041,39 +1078,81 @@
         // বাটন
         document.querySelector('.btn-buy')?.addEventListener('click', () => showToast('অর্ডার প্রক্রিয়া শুরু হয়েছে'));
         document.querySelector('.btn-quote-large')?.addEventListener('click', () => showToast('কোটেশন অনুরোধ পাঠানো হয়েছে'));
-        document.querySelectorAll('.related-card').forEach(card => {
-            card.addEventListener('click', function() {
-                const name = this.dataset.name;
-                const supplier = this.dataset.supplier;
-                const price = parseFloat(this.dataset.price);
-                const moq = this.dataset.moqu;
-                const quantity = this.dataset.quantity;
-                const status = parseInt(this.dataset.status);
+        document.addEventListener("DOMContentLoaded", function() {
 
-                // Update product info
-                document.getElementById('productName').innerText = name;
-                document.getElementById('supplierName').innerText = supplier;
-                document.getElementById('productPrice').innerText = '$' + price.toFixed(2);
+            const cards = document.querySelectorAll('.related-card');
 
-                const wholesalePrice = (price * 0.97).toFixed(2);
-                const bulkPrice = (price * 0.93).toFixed(2);
-                document.getElementById('wholesalePrice').innerText = '$' + wholesalePrice;
-                document.getElementById('bulkPrice').innerText = '$' + bulkPrice;
+            if (!cards.length) return;
 
-                document.getElementById('productMoq').innerText = moq + ' পিস';
-                document.getElementById('productQuantity').innerText = quantity;
+            cards.forEach(card => {
 
-                const badge = document.getElementById('verifiedBadge');
-                badge.style.display = (status === 1) ? 'block' : 'none';
+                card.addEventListener('click', function() {
 
-                showToast('পণ্য পরিবর্তন হয়েছে');
+                    // Get data safely
+                    const name = this.dataset.name || '';
+                    const supplier = this.dataset.supplier || '';
+                    const price = parseFloat(this.dataset.price) || 0;
+                    const moq = this.dataset.moq || 0; // FIXED (moqu → moq)
+                    const quantity = this.dataset.quantity || 0;
+                    const status = parseInt(this.dataset.status) || 0;
+                    const productId = this.dataset.id || '';
 
-                // Scroll fix
-                window.scrollTo({
-                    top: document.querySelector('.product-details').offsetTop - 100,
-                    behavior: 'smooth'
+                    // Update UI safely
+                    const productName = document.getElementById('productName');
+                    const supplierName = document.getElementById('supplierName');
+                    const productPrice = document.getElementById('productPrice');
+                    const wholesalePrice = document.getElementById('wholesalePrice');
+                    const bulkPrice = document.getElementById('bulkPrice');
+                    const productMoq = document.getElementById('productMoq');
+                    const productQuantity = document.getElementById('productQuantity');
+                    const verifiedBadge = document.getElementById('verifiedBadge');
+                    const btnQuote = document.getElementById('btnQuote');
+
+                    if (productName) productName.innerText = name;
+                    if (supplierName) supplierName.innerText = supplier;
+                    if (productPrice) productPrice.innerText = '$' + price.toFixed(2);
+                    if (wholesalePrice) wholesalePrice.innerText = '$' + (price * 0.97).toFixed(2);
+                    if (bulkPrice) bulkPrice.innerText = '$' + (price * 0.93).toFixed(2);
+                    if (productMoq) productMoq.innerText = moq + ' পিস';
+                    if (productQuantity) productQuantity.innerText = quantity;
+
+                    if (verifiedBadge) {
+                        verifiedBadge.style.display = (status === 1) ? 'block' : 'none';
+                    }
+
+                    if (btnQuote && productId) {
+                        btnQuote.onclick = function(e) {
+                            e.preventDefault();
+                            window.location.href = '/rfq/' + productId;
+                        }
+                    }
+                    const btnBuy = document.querySelector('.btn-buy');
+
+                    if (btnBuy && productId) {
+                        const route = btnBuy.dataset.route; // Blade থেকে "/order/create/"
+                        btnBuy.onclick = function(e) {
+                            e.preventDefault();
+                            window.location.href = '/order/create/' + productId;
+                        }
+                    }
+
+                    // Smooth Scroll (Navbar safe)
+                    const productSection = document.querySelector('.product-details');
+                    if (productSection) {
+                        productSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+
+                    if (typeof showToast === "function") {
+                        showToast('পণ্য পরিবর্তন হয়েছে');
+                    }
+
                 });
+
             });
+
         });
 
         // মোবাইল মেনু

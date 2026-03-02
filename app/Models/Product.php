@@ -28,4 +28,13 @@ class Product extends Model
     {
         return $this->belongsTo(Seller::class);
     }
+
+    public function rfqs()
+    {
+        return $this->hasMany(Rfq::class);
+    }
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

@@ -54,24 +54,27 @@
             </li>
 
             <li class="side-nav-item">
+                <a href="{{route('seller.orders')}}" class="side-nav-link">
+                    <i class="ri-dashboard-3-line"></i>
+                    <span class="badge bg-success float-end"></span>
+                    <span> Orders </span>
+                </a>
+            </li>
+
+            <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="{{url('')}}/#sidebarBaseUI" aria-expanded="false" aria-controls="sidebarBaseUI" class="side-nav-link">
                     <i class="ri-briefcase-line"></i>
-                    <span> Sale </span>
+                    <span> RFQ </span>
                     <span class="menu-arrow"></span>
                 </a>
                 <div class="collapse" id="sidebarBaseUI">
                     <ul class="side-nav-second-level">
                         <li>
-                            <a href="{{url('')}}/ui-accordions.html">Sale List</a>
+                            <a href="{{route('rfq.index')}}">Qutatuion List</a>
                         </li>
                         <li>
-                            <a href="">POS</a>
+                            <a href="{{route('seller.rfqs')}}">Buyer Reply</a>
                         </li>
-                        <li>
-                            <a href="{{url('')}}/ui-avatars.html">Add Sale</a>
-                        </li>
-                        <li>
-                            <a href="{{url('')}}/ui-buttons.html">Sale Return</a>
                         </li>
                     </ul>
                 </div>

@@ -13,7 +13,7 @@ class SellerController extends Controller
      */
     public function index()
     {
-        $sellers = Seller::orderBy('status', 'desc')->get();
+        $sellers = Seller::orderBy('id', 'desc')->get();
 
         return view('backend.people.seller', compact('sellers'));
     }

@@ -10,7 +10,7 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <style>
         * {
             margin: 0;
@@ -457,7 +457,7 @@
                 right: 0;
                 background: white;
                 padding: 20px;
-                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
                 flex-direction: column;
                 gap: 20px;
             }
@@ -542,8 +542,9 @@
                     <a href="#" class="active">কোটেশন অনুরোধ</a>
                 </div>
                 <div class="nav-buttons">
-                    <a href="{{ route('init.login') }}" class="btn-outline">লগইন</a>
-                    <a href="{{ route('init.reg') }}" class="btn-primary">রেজিস্টার</a>
+                    <a href="{{ url('buyer/dashboard') }}" class="btn btn-primary">
+                        ড্যাশবোর্ড
+                    </a>
                 </div>
             </div>
         </div>
@@ -553,13 +554,19 @@
     <div class="container">
         <div class="rfq-section">
             <div class="rfq-card">
+                @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
                 <div class="rfq-header">
                     <i class="fas fa-file-invoice"></i>
                     <h1>কোটেশন অনুরোধ ফর্ম</h1>
                     <p>আপনার প্রয়োজনীয় পণ্যের বিস্তারিত তথ্য দিন</p>
                 </div>
 
-                <form action="{{ route('rfq.submit') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('rfq.submit') }}" method="POST">
                     @csrf
 
                     <!-- পণ্যের তথ্য -->
@@ -568,10 +575,16 @@
                             <label>পণ্যের নাম <span class="required-star">*</span></label>
                             <div class="input-wrapper">
                                 <i class="fas fa-box input-icon"></i>
-                                <input type="text" name="product_name" placeholder="পণ্যের নাম লিখুন" required>
+
+                                <input type="text"
+                                    name="product_name"
+                                    value="{{ $product->name }}"
+                                    readonly>
                             </div>
                         </div>
                     </div>
+                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                    <input type="hidden" name="buyer_id" value="{{ $buyer->id }}">
 
                     <!-- পরিমাণ ও ইউনিট -->
                     <div class="form-row">
@@ -617,65 +630,72 @@
                             <label>কোম্পানির নাম <span class="required-star">*</span></label>
                             <div class="input-wrapper">
                                 <i class="fas fa-building input-icon"></i>
-                                <input type="text" name="company_name" placeholder="আপনার কোম্পানি">
+
+                                <input type="text" name="company"
+                                    value="{{ $buyer->company }}"
+                                    readonly>
                             </div>
                         </div>
                     </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>ইমেইল ঠিকানা <span class="required-star">*</span></label>
-                            <div class="input-wrapper">
-                                <i class="fas fa-envelope input-icon"></i>
-                                <input type="email" name="email" placeholder="your@email.com" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label>মোবাইল নম্বর <span class="required-star">*</span></label>
-                            <div class="input-wrapper">
-                                <i class="fas fa-phone-alt input-icon"></i>
-                                <input type="tel" name="phone" placeholder="+৮৮০ ১XXX-XXXXXX" required>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- বিস্তারিত বার্তা -->
-                    <div class="form-group">
-                        <label>বিস্তারিত বিবরণ / স্পেসিফিকেশন</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-comment input-icon"></i>
-                            <textarea name="message" placeholder="পণ্যের বিস্তারিত তথ্য লিখুন... যেমন: সাইজ, কালার, কোয়ালিটি, সার্টিফিকেশন ইত্যাদি"></textarea>
-                        </div>
-                    </div>
-
-                    <!-- অতিরিক্ত প্রয়োজনীয়তা -->
-                    <div class="checkbox-group">
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="samples" value="1"> <span>নমুনা প্রয়োজন</span>
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="certification" value="1"> <span>সার্টিফিকেট প্রয়োজন</span>
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="custom_packaging" value="1"> <span>কাস্টম প্যাকেজিং</span>
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" name="private_label" value="1"> <span>প্রাইভেট লেবেল</span>
-                        </label>
-                    </div>
-
-                    <!-- বাটন -->
-                    <div class="form-buttons">
-                        <a href="{{ url('/') }}" class="btn-cancel">বাতিল করুন</a>
-                        <button type="submit" class="btn-submit">
-                            <span>কোটেশন অনুরোধ পাঠান</span>
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
-                </form>
             </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>ইমেইল ঠিকানা <span class="required-star">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input type="email" name="email"
+                            value="{{ $buyer->email }}"
+                            readonly>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>মোবাইল নম্বর <span class="required-star">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-phone-alt input-icon"></i>
+                        <input type="text" value="{{ $buyer->contact }}" name="contact"
+                            readonly>
+                    </div>
+                </div>
+            </div>
+
+            <!-- বিস্তারিত বার্তা -->
+            <div class="form-group">
+                <label>বিস্তারিত বিবরণ / স্পেসিফিকেশন</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-comment input-icon"></i>
+                    <textarea name="message" placeholder="পণ্যের বিস্তারিত তথ্য লিখুন... যেমন: সাইজ, কালার, কোয়ালিটি, সার্টিফিকেশন ইত্যাদি"></textarea>
+                </div>
+            </div>
+
+            <!-- অতিরিক্ত প্রয়োজনীয়তা -->
+            <div class="checkbox-group">
+                <label class="checkbox-item">
+                    <input type="checkbox" name="samples" value="1"> <span>নমুনা প্রয়োজন</span>
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="certification" value="1"> <span>সার্টিফিকেট প্রয়োজন</span>
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="custom_packaging" value="1"> <span>কাস্টম প্যাকেজিং</span>
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="private_label" value="1"> <span>প্রাইভেট লেবেল</span>
+                </label>
+            </div>
+
+            <!-- বাটন -->
+            <div class="form-buttons">
+                <a href="{{ url('/') }}" class="btn-cancel">বাতিল করুন</a>
+                <button type="submit" class="btn-submit">
+                    <span>কোটেশন অনুরোধ পাঠান</span>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+            </form>
         </div>
+    </div>
     </div>
 
     <!-- ফুটার -->
@@ -726,7 +746,7 @@
         document.addEventListener('click', function(event) {
             const menu = document.getElementById('navMenu');
             const btn = document.querySelector('.mobile-menu-btn');
-            
+
             if (menu && btn && !menu.contains(event.target) && !btn.contains(event.target)) {
                 menu.classList.remove('show');
             }
